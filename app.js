@@ -47,6 +47,21 @@ const createCustomer = async () => {
 const viewCustomer = async () => {
     const customers = await Customer.find().sort({ text: 'asc' })
     console.log('All Customers: ', customers)
+    getAction();
+}
+
+// Update
+const updateCustomer = async () => {
+    const customers = await Customer.find().sort({ text: 'asc' })
+    console.log('Below is a list of Customers:', customers)
+    
+    let action = prompt('Copy and paste the id of the customer you would like to update here: ')
+    console.log(action)
+    const newName = prompt("What is the Customer's new name?: ")
+    const newAge = parseInt(prompt("What is the Customer's new age?: "), 10)
+    const updatedCustomer = await Customer.findByIdAndUpdate(action, { name: newName, age: newAge }, {new: true})
+    console.log('Updated Customer: ', updatedCustomer)
+    getAction();
 }
 
 // Quit
@@ -75,8 +90,9 @@ const performAction = async (action) => {
     } else if (action === 2) {
         // View all customers
         await viewCustomer()
-//     } else if (action === 3) {
-//         // Update a customer
+    } else if (action === 3) {
+        // Update a customer
+        await updateCustomer()
 //     } else if (action === 4) {
 //         // Delete a customer
     } else if (action === 5) {
