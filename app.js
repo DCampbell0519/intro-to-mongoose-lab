@@ -43,6 +43,12 @@ const createCustomer = async () => {
     getAction();
 }
 
+// View
+const viewCustomer = async () => {
+    const customers = await Customer.find().sort({ text: 'asc' })
+    console.log('All Customers: ', customers)
+}
+
 // Quit
 const quitApplication = async () => {
     process.exit()
@@ -66,8 +72,9 @@ const performAction = async (action) => {
     if (action === 1) {
         // Create a customer
         await createCustomer()
-//     } else if (action === 2) {
-//         // View all customers
+    } else if (action === 2) {
+        // View all customers
+        await viewCustomer()
 //     } else if (action === 3) {
 //         // Update a customer
 //     } else if (action === 4) {
