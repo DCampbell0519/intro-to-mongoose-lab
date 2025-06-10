@@ -1,34 +1,18 @@
 
 /*------------------------------- Starter Code -------------------------------*/
 const prompt = require('prompt-sync')();
-// const username = prompt(welcomeMessage());
 const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
 const Customer = require('./models/customer');
 
-// console.log(`Your name is ${username}`);
-
-
 const connect = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
-    // console.log('Connected to MongoDB')
     console.log('Welcome to the CRM')
     await getAction()
-    
-
-    // await runQueries()
-
-    // process.exit();
 }
 
-// const runQueries = async () => {
-//     console.log('Queries are running')
-// }
-
 connect();
-
-
 
 /*------------------------------ Query Functions -----------------------------*/
 
@@ -55,8 +39,7 @@ const updateCustomer = async () => {
     const customers = await Customer.find().sort({ text: 'asc' })
     console.log('Below is a list of Customers:', customers)
     
-    let action = prompt('Copy and paste the id of the customer you would like to update here: ')
-    console.log(action)
+    let action = prompt('Copy and paste the id of the customer you would like to UPDATE here: ')
     const newName = prompt("What is the Customer's new name?: ")
     const newAge = parseInt(prompt("What is the Customer's new age?: "), 10)
     const updatedCustomer = await Customer.findByIdAndUpdate(action, { name: newName, age: newAge }, {new: true})
@@ -64,11 +47,23 @@ const updateCustomer = async () => {
     getAction();
 }
 
-// Quit
-const quitApplication = async () => {
-    process.exit()
+// Delete
+const deleteCustomer = async () => {
+    const customers = await Customer.find().sort({ text: 'asc' })
+    console.log('Below is a list of Customers:', customers)
+
+    let action = prompt('Copy and paste the id of the customer you would like to DELETE here: ')
+    const deletedCustomer = await Customer.findByIdAndDelete(action)
+    console.log('Deleted Customer:', deletedCustomer)
+    getAction();
 }
 
+// Quit
+const quitApplication = async () => {
+    console.log('Exiting application.  Fare thee well, you magnificent thing you...')
+    mongoose.connection.close();
+    process.exit();
+}
 
 const getAction = async () => {
     console.log('What would you like to do?')
@@ -82,24 +77,15 @@ const getAction = async () => {
 }
 
 const performAction = async (action) => {
-    console.log('Everything seems to be working')
-
     if (action === 1) {
-        // Create a customer
         await createCustomer()
     } else if (action === 2) {
-        // View all customers
         await viewCustomer()
     } else if (action === 3) {
-        // Update a customer
         await updateCustomer()
-//     } else if (action === 4) {
-//         // Delete a customer
+    } else if (action === 4) {
+        await deleteCustomer()
     } else if (action === 5) {
-        // Quit
         await quitApplication()
     }
 }
-
-
-// Create
